@@ -1,6 +1,6 @@
 package user
 
 type UserInterface interface {
-	CreateAccount(user *User) error
-	UpdateAccount(account string, money int64) error
+	CreateAccount(user *User) (string,error)
+	UpdateAmount(account string, money int64) error
 }

@@ -10,7 +10,7 @@ import (
 )
 
 // Connect to postgres
-func ConnectToDB() {
+func ConnectToDB() (*sql.DB, error) {
 	host := os.Getenv("host")
 	port := os.Getenv("port")
 	user := os.Getenv("user")
@@ -23,12 +23,13 @@ func ConnectToDB() {
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Printf("Error opening database connection: %v\n", err)
-		return
+		return nil, err
 	}
 	err = db.Ping()
 	if err != nil {
 		log.Printf("Error connecting to the database: %v\n", err)
-		return
+		return nil, err
 	}
 	fmt.Println("Successfully connected to PostgreSQL!")
+	return db, err
 }
