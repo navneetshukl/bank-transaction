@@ -8,12 +8,14 @@ import (
 )
 
 type UserInterfaceImpl struct {
-	db ports.UserDB
+	userDB ports.UserDB
+	
 }
 
-func NewUserInterfaceImpl(db *db.UserDatabase) *UserInterfaceImpl {
+func NewUserInterfaceImpl(userdb *db.UserDatabase) *UserInterfaceImpl {
 	return &UserInterfaceImpl{
-		db: db,
+		userDB: userdb,
+		
 	}
 }
 
@@ -32,7 +34,7 @@ func (u *UserInterfaceImpl) CreateAccount(userDet *user.User) (string, error) {
 	}
 	userDet.Account = accountNumber
 	userDet.Money = 0
-	err = u.db.InsertUser(userDet)
+	err = u.userDB.InsertUser(userDet)
 	if err != nil {
 		log.Println("Failed to insert user")
 		return "", user.ErrCreatingUser
@@ -44,13 +46,13 @@ func (u *UserInterfaceImpl) UpdateAmount(account string, money int64) error {
 
 	// Get previous amount from DB
 
-	amount, err := u.db.GetAmountOfUser(account)
+	amount, err := u.userDB.GetAmountOfUser(account)
 	if err != db.ErrNoUserFound {
 		log.Println("Failed to get amount of user")
 		return user.ErrGettingAmount
 	}
 	amount = amount + money
-	err = u.db.UpdateAmount(account, amount)
+	err = u.userDB.UpdateAmount(account, amount)
 	if err != nil {
 		log.Println("Failed to update amount of user")
 		return user.ErrUpdatingAmount

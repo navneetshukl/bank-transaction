@@ -10,11 +10,13 @@ import (
 
 type BankInterfaceImpl struct {
 	userDB ports.UserDB
+	bankDB ports.BankDB
 }
 
-func NewBankInterfaceImpl(db *db.UserDatabase) *BankInterfaceImpl {
+func NewBankInterfaceImpl(userdb *db.UserDatabase, bankdb *db.BankDatabase) *BankInterfaceImpl {
 	return &BankInterfaceImpl{
-		userDB: db,
+		userDB: userdb,
+		bankDB: bankdb,
 	}
 }
 
@@ -42,6 +44,12 @@ func (b *BankInterfaceImpl) TransferMoney(transfer *bank.MoneyTransfer) error {
 	}
 	fromUserMoney = fromUserMoney - int64(transferAmount)
 	toUserMoney = toUserMoney + int64(transferAmount)
+
+	err = b.bankDB.TransferMoney(transfer.FromAccount, transfer.ToAccount, fromUserMoney, toUserMoney)
+	if err != nil {
+		log.Println("Failed to transfer money ", err)
+		return bank.ErrTransferMoney
+	}
 
 	return nil
 }
