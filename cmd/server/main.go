@@ -22,7 +22,7 @@ func main() {
 		return
 	}
 
-	dbUseCase := db.NewDatabase(DB)
+	dbUseCase := db.NewUserDatabase(DB)
 	userUseCase := user.NewUserInterfaceImpl(dbUseCase)
 	userHandler := userhandler.NewUserHandler(userUseCase)
 	routes := routes.SetupRoutes(userHandler)

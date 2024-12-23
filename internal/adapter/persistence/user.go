@@ -5,15 +5,15 @@ import (
 	"transaction/internal/core/user"
 )
 
-type Database struct {
+type UserDatabase struct {
 	DB *sql.DB
 }
 
-func NewDatabase(db *sql.DB) *Database {
-	return &Database{DB: db}
+func NewUserDatabase(db *sql.DB) *UserDatabase {
+	return &UserDatabase{DB: db}
 }
 
-func (u *Database) InsertUser(userDet *user.User) error {
+func (u *UserDatabase) InsertUser(userDet *user.User) error {
 	defer u.DB.Close()
 
 	query := `Insert into users(email,name,phone,bank,account_number) values($1,$2,$3,$4,$5)`
@@ -24,7 +24,7 @@ func (u *Database) InsertUser(userDet *user.User) error {
 	return nil
 }
 
-func (u *Database) UpdateAmount(account string, money int64) error {
+func (u *UserDatabase) UpdateAmount(account string, money int64) error {
 	defer u.DB.Close()
 
 	query := `UPDATE users SET amount=$1 WHERE account_number=$2`
@@ -39,7 +39,7 @@ func (u *Database) UpdateAmount(account string, money int64) error {
 	return nil
 }
 
-func (u *Database) GetUserCount(account string) (int, error) {
+func (u *UserDatabase) GetUserCount(account string) (int, error) {
 	defer u.DB.Close()
 	query := `SELECT count(account_number) from users where account_number=$1`
 	var count int
@@ -53,7 +53,7 @@ func (u *Database) GetUserCount(account string) (int, error) {
 	return count, nil
 }
 
-func (u *Database) GetAmountOfUser(account string) (int64, error) {
+func (u *UserDatabase) GetAmountOfUser(account string) (int64, error) {
 	query := `SELECT amount from users where account_number=$1`
 	var amount int64
 	err := u.DB.QueryRow(query, account).Scan(&amount)

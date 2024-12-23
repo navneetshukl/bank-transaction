@@ -11,7 +11,7 @@ type UserInterfaceImpl struct {
 	db ports.UserDB
 }
 
-func NewUserInterfaceImpl(db *db.Database) *UserInterfaceImpl {
+func NewUserInterfaceImpl(db *db.UserDatabase) *UserInterfaceImpl {
 	return &UserInterfaceImpl{
 		db: db,
 	}
