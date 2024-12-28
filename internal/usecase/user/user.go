@@ -9,13 +9,11 @@ import (
 
 type UserInterfaceImpl struct {
 	userDB ports.UserDB
-	
 }
 
 func NewUserInterfaceImpl(userdb *db.UserDatabase) *UserInterfaceImpl {
 	return &UserInterfaceImpl{
 		userDB: userdb,
-		
 	}
 }
 
@@ -29,14 +27,13 @@ func (u *UserInterfaceImpl) CreateAccount(userDet *user.User) (string, error) {
 	// generate account number of 10 digits for user
 	accountNumber, err := user.GenerateUniqueRandomValue(10)
 	if err != nil {
-		log.Println("Failed to generate account number")
+		log.Println("Failed to generate account number ", err)
 		return "", user.ErrGeneratingAccountNumber
 	}
 	userDet.Account = accountNumber
-	userDet.Money = 0
 	err = u.userDB.InsertUser(userDet)
 	if err != nil {
-		log.Println("Failed to insert user")
+		log.Println("Failed to insert user ", err)
 		return "", user.ErrCreatingUser
 	}
 	return accountNumber, nil
@@ -47,14 +44,15 @@ func (u *UserInterfaceImpl) UpdateAmount(account string, money int64) error {
 	// Get previous amount from DB
 
 	amount, err := u.userDB.GetAmountOfUser(account)
-	if err != db.ErrNoUserFound {
-		log.Println("Failed to get amount of user")
+
+	if err != db.ErrNoUserFound && err != nil {
+		log.Println("Failed to get amount of user ", err)
 		return user.ErrGettingAmount
 	}
 	amount = amount + money
 	err = u.userDB.UpdateAmount(account, amount)
 	if err != nil {
-		log.Println("Failed to update amount of user")
+		log.Println("Failed to update amount of user ", err)
 		return user.ErrUpdatingAmount
 	}
 

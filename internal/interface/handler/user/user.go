@@ -25,6 +25,7 @@ func (u *Userhandler) CreateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "something went wrong",
 			"status":  "failed",
+			"error":err.Error(),
 		})
 	}
 
@@ -33,6 +34,7 @@ func (u *Userhandler) CreateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "failed to create account",
 			"status":  "failed",
+			"error":err.Error(),
 		})
 	}
 
@@ -59,6 +61,7 @@ func (u *Userhandler) UpdateAmount(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Invalid request",
 			"status":  "failed",
+			"error":err.Error(),
 		})
 	}
 
@@ -69,6 +72,7 @@ func (u *Userhandler) UpdateAmount(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "something went wrong",
 			"status":  "failed",
+			"error":err.Error(),
 		})
 	}
 
@@ -77,6 +81,7 @@ func (u *Userhandler) UpdateAmount(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "failed to update amount",
 			"status":  "failed",
+			"error":err.Error(),
 		})
 	}
 
